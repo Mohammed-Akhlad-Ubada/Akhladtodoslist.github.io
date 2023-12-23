@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="icon" href="images/akhlad-high-resolution-logo.png">
+    <title>TODOs LIST</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="images/akhlad-high-resolution-logo.png" width="30" height="30" alt="">
+          </a>
+        <a class="navbar-brand" href="#">TODOs LIST</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <div class="container">
+        <h2 class="my-4 text-center">TODOs LIST</h2>
+    </div>
+    <div class="container my-4">
+       
+            <div class="form-group">
+                
+                <label for="exampleInputTitle">Title</label>
+                <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your data with anyone else.</small>
+
+            </div>
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea class="form-control" id="description" rows="3"></textarea>
+            </div>
+            <button  class="btn btn-primary" onclick="getupdate()">Add to list</button>
+            <button  class="btn btn-primary" id="clearitems">Clear list</button>
+        
+    </div>
+    <div class="container my-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Sno</th>
+                    <th scope="col">Item Title</th>
+                    <th scope="col">Item Description</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr>
+                    <th scope="row">1</th>
+                    <td>title</td>
+                    <td>description</td>
+                    <td><button class="btn btn-primary btn-sm">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let jasonarr = [];
+        function getupdate() {
+            var title = document.getElementById("title").value;
+            var desc = document.getElementById("description").value;
+          
+            if (localStorage.getItem("jasonitem") == null) {
+                console.log("Updating");
+                jasonarr.push([title, desc]);
+                var jso = JSON.stringify(jasonarr);
+                localStorage.setItem("jasonitem",jso);
+            }
+            else{
+                var jasonarrstr=localStorage.getItem("jasonitem");
+                jasonarr=JSON.parse(jasonarrstr);
+                jasonarr.push([title,desc]);
+                jso=JSON.stringify(jasonarr);
+                localStorage.setItem("jasonitem",jso);
+
+            }
+            updatetable();
+        }
+        
+        function updatetable()
+        {
+                var str="";
+            var tablebody=document.getElementById("tbody");
+            jasonarr.forEach((element,index) => {
+                str+=`<tr>
+                    <th scope="row">${index+1}</th>
+                    <td>${element[0]}</td>
+                    <td>${element[1]}</td>
+                    <td><button class="btn btn-primary btn-sm" onclick=deleted(${index})>Delete</button></td>
+                </tr>`;
+                
+            });
+            tablebody.innerHTML=str;
+}
+
+
+function deleted(index)
+{
+    var jasonarrstr=localStorage.getItem("jasonitem");
+    jasonarr=JSON.parse(jasonarrstr);
+    jasonarr.splice(index,1);
+    jso=JSON.stringify(jasonarr);
+    localStorage.setItem("jasonitem",jso);
+    updatetable();
+
+} 
+var a=document.getElementById("clearitems");
+a.addEventListener("click",function()
+{
+    clearstorage();
+    updatetable(); 
+});
+function clearstorage()
+{
+    if(confirm("Do you want to clear"))
+    {
+    console.log("clearing localstorage");
+    localStorage.clear();
+    jasonarr=[];
+    updatetable();
+}
+    
+}
+
+
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
